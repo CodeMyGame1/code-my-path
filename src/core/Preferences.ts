@@ -7,7 +7,7 @@ export class Preferences {
 
   // Local storage
   public maxHistory: number = 50;
-  public isGoogleAnalyticsEnabled: boolean = false;
+  // public isGoogleAnalyticsEnabled: boolean = false;
   public isExperimentalFeaturesEnabled: boolean = false;
   public themeType: AppThemeType = AppThemeType.Dark;
   public layoutType: LayoutType = LayoutType.Classic;
@@ -45,7 +45,7 @@ export class Preferences {
     this.disposers.forEach(disposer => disposer());
     this.disposers = [
       this.link("maxHistory", "maxHistory"),
-      this.link("isGoogleAnalyticsEnabled", "googleAnalyticsEnabled"),
+      // this.link("isGoogleAnalyticsEnabled", "googleAnalyticsEnabled"),
       this.link("isExperimentalFeaturesEnabled", "experimentalFeaturesEnabled"),
       this.link("themeType", "theme"),
       this.link("layoutType", "layout"),

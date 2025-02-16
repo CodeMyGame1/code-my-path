@@ -94,7 +94,7 @@ async function writeFile(buffer: ArrayBuffer): Promise<boolean> {
     await writable.write(buffer);
     await writable.close();
 
-    getAppStores().ga.gtag("event", "write_file_format", { format: app.format.getName() });
+    // getAppStores().ga.gtag("event", "write_file_format", { format: app.format.getName() });
 
     enqueueSuccessSnackbar(logger, "Saved");
     return true;
@@ -173,7 +173,7 @@ function downloadFile(buffer: ArrayBuffer) {
   a.download = app.mountingFile.name;
   a.click();
 
-  getAppStores().ga.gtag("event", "download_file_format", { format: app.format.getName() });
+  // getAppStores().ga.gtag("event", "download_file_format", { format: app.format.getName() });
 }
 
 async function choiceSave(): Promise<boolean> {

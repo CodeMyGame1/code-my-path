@@ -11,7 +11,7 @@ import { Quantity, UnitConverter, UnitOfLength } from "./Unit";
 import { CommandHistory } from "./Command";
 import { SemVer } from "semver";
 import { Confirmation } from "@app/common.blocks/modal/ConfirmationModal";
-import { GoogleAnalytics } from "./GoogleAnalytics";
+// import { GoogleAnalytics } from "./GoogleAnalytics";
 import { IOFileHandle } from "./InputOutput";
 import { getPathSamplePoints, getUniformPointsFromSamples } from "./Calculation";
 import { APP_VERSION_STRING } from "../Version";
@@ -388,7 +388,7 @@ export class MainApp {
       throw new Error("Unable to open the path file due to validation errors.");
     }
 
-    ga.gtag("event", "import_file_format", { format: format.getName() });
+    // ga.gtag("event", "import_file_format", { format: format.getName() });
 
     const result = await runInActionAsync(() => promptFieldImage(gc.fieldImage));
     if (result === false) gc.fieldImage = getDefaultBuiltInFieldImage().getSignatureAndOrigin();
@@ -477,11 +477,11 @@ const appPreferences = new Preferences();
 const assetManager = new AssetManager();
 const clipboard = new AppClipboard();
 const confirmation = new Confirmation();
-const ga = new GoogleAnalytics();
+// const ga = new GoogleAnalytics();
 const ui = new UserInterface();
 const app = new MainApp(); // ALGO: The app must be created last
 
-const appStores = { app, appPreferences, assetManager, clipboard, confirmation, ga, ui } as const;
+const appStores = { app, appPreferences, assetManager, clipboard, confirmation, /* ga, */ ui } as const;
 
 export function getAppStores(): AppStores {
   return appStores;

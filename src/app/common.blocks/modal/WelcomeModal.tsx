@@ -18,20 +18,20 @@ export const WelcomeModalSymbol = Symbol("WelcomeModalSymbol");
 export const WelcomeModal = observer(() => {
   const { appPreferences, ui } = getAppStores();
 
-  const rawGAEnabled = localStorage.getItem("googleAnalyticsEnabled");
-  const [isGAEnabled, setIsGAEnabled] = React.useState(rawGAEnabled !== "false"); // UX: Default to true
+  // const rawGAEnabled = localStorage.getItem("googleAnalyticsEnabled");
+  // const [isGAEnabled, setIsGAEnabled] = React.useState(rawGAEnabled !== "false"); // UX: Default to true
 
   const isBrave = isBraveBrowser();
 
-  React.useEffect(() => {
-    setIsGAEnabled(rawGAEnabled !== "false");
-    if (rawGAEnabled === null) ui.openModal(WelcomeModalSymbol); // UX: Show welcome page if user is new
-  }, [ui, rawGAEnabled]);
+  // React.useEffect(() => {
+  //   setIsGAEnabled(rawGAEnabled !== "false");
+  //   if (rawGAEnabled === null) ui.openModal(WelcomeModalSymbol); // UX: Show welcome page if user is new
+  // }, [ui, rawGAEnabled]);
 
   // UX: Save user preference when user closes the modal
   const onClose = () => {
     // Get the latest value of isGAEnabled and save it to localStorage
-    setIsGAEnabled(action((curr: boolean) => (appPreferences.isGoogleAnalyticsEnabled = curr && isBrave === false)));
+    // setIsGAEnabled(action((curr: boolean) => (appPreferences.isGoogleAnalyticsEnabled = curr && isBrave === false)));
     ui.closeModal(WelcomeModalSymbol);
   };
 
@@ -45,11 +45,11 @@ export const WelcomeModal = observer(() => {
             <Button onClick={onClose}>Continue</Button>
           </Box>
         )}
-        {isBrave ? (
+        {/* {isBrave ? (
           <WelcomeForBraveMDX components={MarkdownOverwrittenComponents} />
         ) : (
           <WelcomeMDX {...{ isGAEnabled, setIsGAEnabled }} components={MarkdownOverwrittenComponents} />
-        )}
+        )} */}
         {isMobileLayout && (
           <Box textAlign="center">
             <Button onClick={onClose}>Begin</Button>

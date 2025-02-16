@@ -47,12 +47,12 @@ export const PreferencesModal = observer(() => {
 
         <Divider />
 
-        <Typography marginY="16px">Other</Typography>
+        {/* <Typography marginY="16px">Other</Typography>
         <FormCheckbox
           label="Enable Google Analytics"
           checked={appPreferences.isGoogleAnalyticsEnabled}
           onCheckedChange={v => (appPreferences.isGoogleAnalyticsEnabled = v)}
-        />
+        /> */}
         <FormCheckbox
           label="Enable Experimental Features"
           checked={appPreferences.isExperimentalFeaturesEnabled}
