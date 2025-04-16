@@ -19,9 +19,13 @@ import RotateRightIcon from "@mui/icons-material/RotateRight";
 import "./ControlConfigPanel.scss";
 import { PanelBox } from "@src/app/component.blocks/PanelBox";
 import { CoordinateSystemTransformation } from "@src/core/CoordinateSystem";
+import { enqueueErrorSnackbar, enqueueSuccessSnackbar } from "@src/app/Notice";
+import { Logger } from "@src/core/Logger";
 
 const ControlConfigPanelBody = observer((props: {}) => {
   const { app } = getAppStores();
+
+  const logger = Logger("ControlConfigPanel");
 
   const isDisabled = app.selectedControl === undefined;
 
@@ -111,6 +115,22 @@ const ControlConfigPanelBody = observer((props: {}) => {
     return new CoordinateSystemTransformation(cs, fieldDimension, firstControl);
   })();
 
+  const copyCoordsToClipboard = async (event?: React.UIEvent, x?: number, y?: number) => {
+    if (!document.hasFocus()) {
+      logger.log("Couldn't copy coordinates to clipboard -- window not focused");
+      enqueueErrorSnackbar(logger, "Couldn't copy coordinates!");
+
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(`${x ? x : xDisplayValue}, ${y ? y : yDisplayValue}`);
+      enqueueSuccessSnackbar(logger, "Copied coordinates to clipboard!");
+    } catch {
+      logger.error("Another unexpected error occurred when copying coords");
+    }
+  };
+
   let xDisplayValue: string;
   let yDisplayValue: string;
   let headingDisplayValue: string;
@@ -140,6 +160,7 @@ const ControlConfigPanelBody = observer((props: {}) => {
       <PanelBox marginTop="0">
         <FormInputField
           label="X"
+          onClick={copyCoordsToClipboard}
           getValue={() => xDisplayValue}
           setValue={(value: string) => {
             if (cst === undefined) return;
@@ -157,14 +178,19 @@ const ControlConfigPanelBody = observer((props: {}) => {
               `Update control ${control.uid} coordinate`,
               new UpdatePathTreeItems([control], newCoord)
             );
+
+            // copy coords to clipboard
+            copyCoordsToClipboard(undefined, newCoord.x, newCoord.y);
           }}
           isValidIntermediate={() => true}
           isValidValue={(candidate: string) => parseFormula(candidate, NumberUOL.parse) !== null}
           disabled={app.selectedEntityCount !== 1 || app.selectedControl === undefined}
           numeric
+          tooltipText="Click on me to copy coordinates!"
         />
         <FormInputField
           label="Y"
+          onClick={copyCoordsToClipboard}
           getValue={() => yDisplayValue}
           setValue={(value: string) => {
             if (cst === undefined) return;
@@ -182,11 +208,15 @@ const ControlConfigPanelBody = observer((props: {}) => {
               `Update control ${control.uid} coordinate`,
               new UpdatePathTreeItems([control], newCoord)
             );
+
+            // copy coords to clipboard
+            copyCoordsToClipboard(undefined, newCoord.x, newCoord.y);
           }}
           isValidIntermediate={() => true}
           isValidValue={(candidate: string) => parseFormula(candidate, NumberUOL.parse) !== null}
           disabled={app.selectedEntityCount !== 1 || app.selectedControl === undefined}
           numeric
+          tooltipText="Click on me to copy coordinates!"
         />
         <FormInputField
           label="Heading"
