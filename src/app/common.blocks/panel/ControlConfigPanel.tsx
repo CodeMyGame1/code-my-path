@@ -160,7 +160,7 @@ const ControlConfigPanelBody = observer((props: {}) => {
       <PanelBox marginTop="0">
         <FormInputField
           label="X"
-          onClick={copyCoordsToClipboard}
+          // onClick={copyCoordsToClipboard}
           getValue={() => xDisplayValue}
           setValue={(value: string) => {
             if (cst === undefined) return;
@@ -190,7 +190,7 @@ const ControlConfigPanelBody = observer((props: {}) => {
         />
         <FormInputField
           label="Y"
-          onClick={copyCoordsToClipboard}
+          // onClick={copyCoordsToClipboard}
           getValue={() => yDisplayValue}
           setValue={(value: string) => {
             if (cst === undefined) return;
