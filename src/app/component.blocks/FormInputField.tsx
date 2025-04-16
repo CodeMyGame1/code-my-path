@@ -1,4 +1,4 @@
-import { TextField, TextFieldProps } from "@mui/material";
+import { TextField, TextFieldProps, Tooltip } from "@mui/material";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { Quantity, UnitConverter, UnitOfLength } from "@core/Unit";
@@ -23,12 +23,13 @@ export type FormInputFieldProps = TextFieldProps & {
   isValidIntermediate: (candidate: string) => boolean;
   isValidValue: (candidate: string) => boolean | [boolean, any];
   numeric?: boolean; // default false
+  tooltipText?: string; // if provided, will show up when hover
 };
 
 const FormInputField = observer(
   forwardRef<HTMLInputElement | null, FormInputFieldProps>((props: FormInputFieldProps, ref) => {
     // rest is used to send props to TextField without custom attributes
-    const { getValue, setValue, isValidIntermediate, isValidValue, numeric: isNumeric, ...rest } = props;
+    const { getValue, setValue, isValidIntermediate, isValidValue, numeric: isNumeric, tooltipText, ...rest } = props;
 
     const initialValue = React.useState(() => getValue())[0];
     const inputRef = React.useRef<HTMLInputElement>(null);
@@ -108,7 +109,34 @@ const FormInputField = observer(
       }
     }, [value, getValue]);
 
-    return (
+    // return (
+    //   <TextField
+    //     InputLabelProps={{ shrink: true }}
+    //     inputRef={inputRef}
+    //     size="small"
+    //     defaultValue={initialValue}
+    //     onChange={action(onChange)}
+    //     {...rest}
+    //     onKeyDown={action(onKeyDown)}
+    //     onBlur={action(onBlur)}
+    //   />
+    // );
+
+    // if tooltip provided, wrap text input field within that
+    return tooltipText ? (
+      <Tooltip title={tooltipText}>
+        <TextField
+          InputLabelProps={{ shrink: true }}
+          inputRef={inputRef}
+          size="small"
+          defaultValue={initialValue}
+          onChange={action(onChange)}
+          {...rest}
+          onKeyDown={action(onKeyDown)}
+          onBlur={action(onBlur)}
+        />
+      </Tooltip>
+    ) : (
       <TextField
         InputLabelProps={{ shrink: true }}
         inputRef={inputRef}
