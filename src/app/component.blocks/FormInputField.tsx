@@ -1,4 +1,4 @@
-import { Button, IconButton, InputAdornment, TextField, TextFieldProps, Tooltip } from "@mui/material";
+import { IconButton, InputAdornment, TextField, TextFieldProps, Tooltip } from "@mui/material";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { Quantity, UnitConverter, UnitOfLength } from "@core/Unit";
@@ -32,7 +32,7 @@ export class CoordsCopyInfo {
    */
   public copyCallback: (...args: any[]) => any;
   /**
-   * Whether to copy just
+   * Whether to copy just x- and y- coordinates, or just heading
    */
   public infoToCopy: CopyCoordsInfo;
 
@@ -135,62 +135,6 @@ const FormInputField = observer(
       }
     }, [value, getValue]);
 
-    // if tooltip provided, wrap text input field within that
-    // return tooltipText ? (
-    //   <Tooltip title={tooltipText}>
-    //     <TextField
-    //       InputLabelProps={{ shrink: true }}
-    //       inputRef={inputRef}
-    //       size="small"
-    //       defaultValue={initialValue}
-    //       onChange={action(onChange)}
-    //       {...rest}
-    //       onKeyDown={action(onKeyDown)}
-    //       onBlur={action(onBlur)}
-    //       InputProps={{
-    //         endAdornment: (copyInfo instanceof CoordsCopyInfo) ? (
-    //           <InputAdornment position="end">
-    //             <Tooltip title="Copy to clipboard">
-    //               <IconButton onClick={(event: React.MouseEvent) => {
-    //                 copyInfo.copyCallback({
-    //                   event: event,
-    //                   control: copyInfo.control
-    //                 });
-    //               }} size="small" sx={{
-    //                 position: "absolute",
-    //                 top: 6,
-    //                 right: 6,
-    //                 opacity: 0.4,              // make it transparent
-    //                 pointerEvents: 'auto',     // allow hover
-    //                 transition: 'opacity 0.2s',
-    //                 '&:hover': {
-    //                   opacity: 1               // full opacity on hover
-    //                 }
-    //               }}>
-    //                 <ContentCopyIcon sx={{
-    //                   width: "10px",
-    //                   height: "10px",
-    //                   color: "#D3D3D3",
-    //                 }}></ContentCopyIcon>
-    //               </IconButton>
-    //             </Tooltip>
-    //           </InputAdornment>
-    //         ) : undefined
-    //       }}
-    //     />
-    //   </Tooltip>
-    // ) : (
-    //   <TextField
-    //     InputLabelProps={{ shrink: true }}
-    //     inputRef={inputRef}
-    //     size="small"
-    //     defaultValue={initialValue}
-    //     onChange={action(onChange)}
-    //     {...rest}
-    //     onKeyDown={action(onKeyDown)}
-    //     onBlur={action(onBlur)}
-    //   />
-    // );
     return (
       <TextField
         InputLabelProps={{ shrink: true }}

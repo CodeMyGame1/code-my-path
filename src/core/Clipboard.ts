@@ -22,12 +22,12 @@ type ClipboardMessageType = "SYNC_DATA" | "COPY_PATHS" | "COPY_CONTROLS";
  * "POSITION" copies just x and y to clipboard
  * "ALL" copies x, y, and heading to clipboard
  */
-export type CopyCoordsInfo = "POSITION" | "ALL";
+export type CopyCoordsInfo = "POSITION" | "HEADING";
 type CopyCoordsArgs = {
   event?: React.UIEvent;
   // x: number,
   // y: number,
-  control: EndControl;
+  control: AnyControl;
   infoToCopy: CopyCoordsInfo;
 };
 
@@ -347,14 +347,20 @@ export class AppClipboard {
   }
 
   public copyCoordsToClipboard = async (args: CopyCoordsArgs) => {
-    const { control, infoToCopy } = args;
+    let { control } = args;
+    const { infoToCopy } = args;
 
     try {
       let textToCopy = "";
       if (infoToCopy === "POSITION") {
         textToCopy = `${control.x.toFixed(3)}, ${control.y.toFixed(3)}`;
-      } else if (infoToCopy === "ALL") {
-        textToCopy = `${control.heading.toFixed(1)}`;
+      } else if (infoToCopy === "HEADING") {
+        // hopefully developers would only set "HEADING" on the proper
+        // controls' ConfigPanels... but just in case
+        if ("heading" in control) {
+          control = control as EndControl;
+          textToCopy = `${control.heading.toFixed(1)}`;
+        }
       }
       await navigator.clipboard.writeText(textToCopy);
       enqueueSuccessSnackbar(logger, "Copied to clipboard!");

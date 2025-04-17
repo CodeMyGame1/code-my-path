@@ -237,7 +237,7 @@ const ControlConfigPanelBody = observer((props: {}) => {
             visibility: app.selectedEntityCount === 1 && !(app.selectedControl instanceof EndControl) ? "hidden" : ""
           }}
           numeric
-          copyInfo={new CoordsCopyInfo(app.selectedControl!, clipboard.copyCoordsToClipboard, "ALL")}
+          copyInfo={new CoordsCopyInfo(app.selectedControl!, clipboard.copyCoordsToClipboard, "HEADING")}
         />
       </PanelBox>
       <PanelBox>
