@@ -29,6 +29,7 @@ import { LemLibFormatV0_4 } from "../format/LemLibFormatV0_4";
 import { LemLibFormatV1_0 } from "../format/LemLibFormatV1_0";
 import { UserInterface } from "./Layout";
 import { CoordinateSystem, Dimension, getNamedCoordinateSystems } from "./CoordinateSystem";
+import socket from "./Socket";
 
 export const APP_VERSION = new SemVer(APP_VERSION_STRING);
 
@@ -481,7 +482,7 @@ const confirmation = new Confirmation();
 const ui = new UserInterface();
 const app = new MainApp(); // ALGO: The app must be created last
 
-const appStores = { app, appPreferences, assetManager, clipboard, confirmation, /* ga, */ ui } as const;
+const appStores = { app, appPreferences, assetManager, clipboard, confirmation, /* ga, */ socket, ui } as const;
 
 export function getAppStores(): AppStores {
   return appStores;

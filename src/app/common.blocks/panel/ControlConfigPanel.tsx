@@ -20,12 +20,9 @@ import RotateRightIcon from "@mui/icons-material/RotateRight";
 import "./ControlConfigPanel.scss";
 import { PanelBox } from "@src/app/component.blocks/PanelBox";
 import { CoordinateSystemTransformation } from "@src/core/CoordinateSystem";
-import { Logger } from "@src/core/Logger";
 
 const ControlConfigPanelBody = observer((props: {}) => {
   const { app, clipboard } = getAppStores();
-
-  const logger = Logger("ControlConfigPanel");
 
   const isDisabled = app.selectedControl === undefined;
 
@@ -162,13 +159,6 @@ const ControlConfigPanelBody = observer((props: {}) => {
               `Update control ${control.uid} coordinate`,
               new UpdatePathTreeItems([control], newCoord)
             );
-
-            // copy coords to clipboard
-            // clipboard.copyCoordsToClipboard({
-            //   "event": undefined,
-            //   "x": newCoord.x,
-            //   "y": newCoord.y,
-            // });
           }}
           isValidIntermediate={() => true}
           isValidValue={(candidate: string) => parseFormula(candidate, NumberUOL.parse) !== null}
@@ -196,13 +186,6 @@ const ControlConfigPanelBody = observer((props: {}) => {
               `Update control ${control.uid} coordinate`,
               new UpdatePathTreeItems([control], newCoord)
             );
-
-            // copy coords to clipboard
-            // clipboard.copyCoordsToClipboard({
-            //   "event": undefined,
-            //   "x": newCoord.x,
-            //   "y": newCoord.y,
-            // });
           }}
           isValidIntermediate={() => true}
           isValidValue={(candidate: string) => parseFormula(candidate, NumberUOL.parse) !== null}

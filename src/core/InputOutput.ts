@@ -81,28 +81,37 @@ function exportFile(): ArrayBuffer | undefined {
 }
 
 async function writeFile(buffer: ArrayBuffer): Promise<boolean> {
-  const { app } = getAppStores();
+  const { app, socket } = getAppStores();
 
-  try {
-    const file = app.mountingFile;
-    if (file.handle === null) throw new Error("fileHandle is undefined");
+  const file = app.mountingFile;
+  if (file.handle === null) throw new Error("fileHandle is undefined");
 
-    // XXX
-    await file.handle.requestPermission({ mode: "readwrite" });
+  socket.emit("pp-file", file.name, buffer);
+  // TODO: await response from server before showing "Saved!"
+  enqueueSuccessSnackbar(logger, "Saved!");
 
-    const writable = await file.handle.createWritable();
-    await writable.write(buffer);
-    await writable.close();
+  return true;
 
-    // getAppStores().ga.gtag("event", "write_file_format", { format: app.format.getName() });
+  // try {
+  //   const file = app.mountingFile;
+  //   if (file.handle === null) throw new Error("fileHandle is undefined");
 
-    enqueueSuccessSnackbar(logger, "Saved");
-    return true;
-  } catch (err) {
-    if (err instanceof DOMException) enqueueErrorSnackbar(logger, "Failed to save file");
-    else enqueueErrorSnackbar(logger, err);
-    return false;
-  }
+  //   // XXX
+  //   await file.handle.requestPermission({ mode: "readwrite" });
+
+  //   const writable = await file.handle.createWritable();
+  //   await writable.write(buffer);
+  //   await writable.close();
+
+  //   // getAppStores().ga.gtag("event", "write_file_format", { format: app.format.getName() });
+
+  //   enqueueSuccessSnackbar(logger, "Saved");
+  //   return true;
+  // } catch (err) {
+  //   if (err instanceof DOMException) enqueueErrorSnackbar(logger, "Failed to save file");
+  //   else enqueueErrorSnackbar(logger, err);
+  //   return false;
+  // }
 }
 
 async function readFile(): Promise<ArrayBuffer | undefined> {
