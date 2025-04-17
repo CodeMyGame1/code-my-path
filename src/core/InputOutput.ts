@@ -81,37 +81,28 @@ function exportFile(): ArrayBuffer | undefined {
 }
 
 async function writeFile(buffer: ArrayBuffer): Promise<boolean> {
-  const { app, socket } = getAppStores();
+  const { app } = getAppStores();
 
-  const file = app.mountingFile;
-  if (file.handle === null) throw new Error("fileHandle is undefined");
+  try {
+    const file = app.mountingFile;
+    if (file.handle === null) throw new Error("fileHandle is undefined");
 
-  socket.emit("pp-file", file.name, buffer);
-  // TODO: await response from server before showing "Saved!"
-  enqueueSuccessSnackbar(logger, "Saved!");
+    // XXX
+    await file.handle.requestPermission({ mode: "readwrite" });
 
-  return true;
+    const writable = await file.handle.createWritable();
+    await writable.write(buffer);
+    await writable.close();
 
-  // try {
-  //   const file = app.mountingFile;
-  //   if (file.handle === null) throw new Error("fileHandle is undefined");
+    // getAppStores().ga.gtag("event", "write_file_format", { format: app.format.getName() });
 
-  //   // XXX
-  //   await file.handle.requestPermission({ mode: "readwrite" });
-
-  //   const writable = await file.handle.createWritable();
-  //   await writable.write(buffer);
-  //   await writable.close();
-
-  //   // getAppStores().ga.gtag("event", "write_file_format", { format: app.format.getName() });
-
-  //   enqueueSuccessSnackbar(logger, "Saved");
-  //   return true;
-  // } catch (err) {
-  //   if (err instanceof DOMException) enqueueErrorSnackbar(logger, "Failed to save file");
-  //   else enqueueErrorSnackbar(logger, err);
-  //   return false;
-  // }
+    enqueueSuccessSnackbar(logger, "Saved");
+    return true;
+  } catch (err) {
+    if (err instanceof DOMException) enqueueErrorSnackbar(logger, "Failed to save file");
+    else enqueueErrorSnackbar(logger, err);
+    return false;
+  }
 }
 
 async function readFile(): Promise<ArrayBuffer | undefined> {
@@ -174,13 +165,22 @@ async function readFileFromInput(): Promise<ArrayBuffer | undefined> {
 }
 
 function downloadFile(buffer: ArrayBuffer) {
-  const { app } = getAppStores();
+  const { app, socket } = getAppStores();
 
-  const a = document.createElement("a");
-  const file = new Blob([buffer], { type: "text/plain" });
-  a.href = URL.createObjectURL(file);
-  a.download = app.mountingFile.name;
-  a.click();
+  // const a = document.createElement("a");
+  // const file = new Blob([buffer], { type: "text/plain" });
+  // a.href = URL.createObjectURL(file);
+  // a.download = app.mountingFile.name;
+  // a.click();
+
+  const file = app.mountingFile;
+  if (file.name === null) throw new Error("filename is undefined");
+
+  socket.emit("pp-file", file.name, buffer);
+  // TODO: await response from server before showing "Saved!"
+  enqueueSuccessSnackbar(logger, "Saved!");
+
+  return true;
 
   // getAppStores().ga.gtag("event", "download_file_format", { format: app.format.getName() });
 }
