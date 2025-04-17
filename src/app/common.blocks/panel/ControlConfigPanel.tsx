@@ -2,7 +2,7 @@ import { Box, IconButton, Tooltip } from "@mui/material";
 import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 import { AnyControl, Control, EndControl } from "@core/Path";
-import { FormInputField, clampQuantity } from "@app/component.blocks/FormInputField";
+import { CoordsCopyInfo, FormInputField, clampQuantity } from "@app/component.blocks/FormInputField";
 import { Quantity, UnitOfAngle, UnitOfLength } from "@core/Unit";
 import { boundHeading, findCentralPoint } from "@core/Calculation";
 import { Coordinate, CoordinateWithHeading, EuclideanTransformation, isCoordinateWithHeading } from "@core/Coordinate";
@@ -11,6 +11,7 @@ import { UpdatePathTreeItems } from "@core/Command";
 import { getAppStores } from "@core/MainApp";
 import { NumberUOA, NumberUOL } from "@token/Tokens";
 import { parseFormula } from "@core/Util";
+
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import FlipIcon from "@mui/icons-material/Flip";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
@@ -19,11 +20,10 @@ import RotateRightIcon from "@mui/icons-material/RotateRight";
 import "./ControlConfigPanel.scss";
 import { PanelBox } from "@src/app/component.blocks/PanelBox";
 import { CoordinateSystemTransformation } from "@src/core/CoordinateSystem";
-import { enqueueErrorSnackbar, enqueueSuccessSnackbar } from "@src/app/Notice";
 import { Logger } from "@src/core/Logger";
 
 const ControlConfigPanelBody = observer((props: {}) => {
-  const { app } = getAppStores();
+  const { app, clipboard } = getAppStores();
 
   const logger = Logger("ControlConfigPanel");
 
@@ -115,22 +115,6 @@ const ControlConfigPanelBody = observer((props: {}) => {
     return new CoordinateSystemTransformation(cs, fieldDimension, firstControl);
   })();
 
-  const copyCoordsToClipboard = async (event?: React.UIEvent, x?: number, y?: number) => {
-    if (!document.hasFocus()) {
-      logger.log("Couldn't copy coordinates to clipboard -- window not focused");
-      enqueueErrorSnackbar(logger, "Couldn't copy coordinates!");
-
-      return;
-    }
-
-    try {
-      await navigator.clipboard.writeText(`${x ? x : xDisplayValue}, ${y ? y : yDisplayValue}`);
-      enqueueSuccessSnackbar(logger, "Copied coordinates to clipboard!");
-    } catch {
-      logger.error("Another unexpected error occurred when copying coords");
-    }
-  };
-
   let xDisplayValue: string;
   let yDisplayValue: string;
   let headingDisplayValue: string;
@@ -180,13 +164,17 @@ const ControlConfigPanelBody = observer((props: {}) => {
             );
 
             // copy coords to clipboard
-            copyCoordsToClipboard(undefined, newCoord.x, newCoord.y);
+            // clipboard.copyCoordsToClipboard({
+            //   "event": undefined,
+            //   "x": newCoord.x,
+            //   "y": newCoord.y,
+            // });
           }}
           isValidIntermediate={() => true}
           isValidValue={(candidate: string) => parseFormula(candidate, NumberUOL.parse) !== null}
           disabled={app.selectedEntityCount !== 1 || app.selectedControl === undefined}
           numeric
-          tooltipText="Click on me to copy coordinates!"
+          copyInfo={new CoordsCopyInfo(app.selectedControl!, clipboard.copyCoordsToClipboard, "POSITION")}
         />
         <FormInputField
           label="Y"
@@ -210,13 +198,17 @@ const ControlConfigPanelBody = observer((props: {}) => {
             );
 
             // copy coords to clipboard
-            copyCoordsToClipboard(undefined, newCoord.x, newCoord.y);
+            // clipboard.copyCoordsToClipboard({
+            //   "event": undefined,
+            //   "x": newCoord.x,
+            //   "y": newCoord.y,
+            // });
           }}
           isValidIntermediate={() => true}
           isValidValue={(candidate: string) => parseFormula(candidate, NumberUOL.parse) !== null}
           disabled={app.selectedEntityCount !== 1 || app.selectedControl === undefined}
           numeric
-          tooltipText="Click on me to copy coordinates!"
+          copyInfo={new CoordsCopyInfo(app.selectedControl!, clipboard.copyCoordsToClipboard, "POSITION")}
         />
         <FormInputField
           label="Heading"
@@ -245,6 +237,7 @@ const ControlConfigPanelBody = observer((props: {}) => {
             visibility: app.selectedEntityCount === 1 && !(app.selectedControl instanceof EndControl) ? "hidden" : ""
           }}
           numeric
+          copyInfo={new CoordsCopyInfo(app.selectedControl!, clipboard.copyCoordsToClipboard, "HEADING")}
         />
       </PanelBox>
       <PanelBox>
