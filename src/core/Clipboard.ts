@@ -2,7 +2,7 @@ import { makeObservable, action } from "mobx";
 import { getAppStores } from "./MainApp";
 import { AnyControl, Control, EndControl, Path, PathTreeItem, relatedPaths } from "./Path";
 import { Logger } from "./Logger";
-import { enqueueInfoSnackbar } from "@app/Notice";
+import { enqueueInfoSnackbar, enqueueSuccessSnackbar } from "@app/Notice";
 import { UnitConverter, UnitOfLength } from "./Unit";
 import { Expose, Type, instanceToPlain, plainToClassFromExist, plainToInstance } from "class-transformer";
 import { ValidateNumber, makeId, runInActionAsync } from "./Util";
@@ -10,12 +10,26 @@ import DOMPurify from "dompurify";
 import { AddPath, InsertControls, InsertPaths, RemovePathTreeItems } from "./Command";
 import { Equals, IsArray, Length, ArrayMinSize, ValidateNested, isObject, validate } from "class-validator";
 import { APP_VERSION_STRING } from "../Version";
+import React from "react";
 
 const logger = Logger("Clipboard");
 
 const MIME_TYPE = `application/x-clipboard-path.jerryio.com-${APP_VERSION_STRING}`;
 
 type ClipboardMessageType = "SYNC_DATA" | "COPY_PATHS" | "COPY_CONTROLS";
+
+/**
+ * "POSITION" copies just x and y to clipboard
+ * "ALL" copies x, y, and heading to clipboard
+ */
+export type CopyCoordsInfo = "POSITION" | "ALL";
+type CopyCoordsArgs = {
+  event?: React.UIEvent;
+  // x: number,
+  // y: number,
+  control: EndControl;
+  infoToCopy: CopyCoordsInfo;
+};
 
 abstract class ClipboardMessage {
   abstract readonly discriminator: ClipboardMessageType;
@@ -331,6 +345,23 @@ export class AppClipboard {
       return undefined;
     }
   }
+
+  public copyCoordsToClipboard = async (args: CopyCoordsArgs) => {
+    const { control, infoToCopy } = args;
+
+    try {
+      let textToCopy = "";
+      if (infoToCopy === "POSITION") {
+        textToCopy = `${control.x.toFixed(3)}, ${control.y.toFixed(3)}`;
+      } else if (infoToCopy === "ALL") {
+        textToCopy = `${control.heading.toFixed(1)}`;
+      }
+      await navigator.clipboard.writeText(textToCopy);
+      enqueueSuccessSnackbar(logger, "Copied to clipboard!");
+    } catch {
+      logger.error("Another unexpected error occurred when copying coords");
+    }
+  };
 
   constructor() {
     makeObservable(this, { cut: action, copy: action, paste: action });
