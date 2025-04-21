@@ -75,10 +75,10 @@
     "react-app-alias": "^2.2.2",
     "react-scripts": "5.0.1",
     "remark-gfm": "^4.0.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.7.2"
   },
   "overrides": {
-    "typescript": "^5.4.5"
+    "typescript": "^5.7.2"
   },
   "scripts": {
     "start": "serve -s build -l ${PORT:-8000}",
