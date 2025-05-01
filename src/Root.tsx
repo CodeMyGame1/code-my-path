@@ -20,7 +20,7 @@ import { onDownload, onDownloadAs, onDropFile, onNew, onOpen, onSave, onSaveAs }
 import { NoticeProvider } from "./app/Notice";
 import { ConfirmationModal } from "./app/common.blocks/modal/ConfirmationModal";
 import { DragDropBackdrop } from "./app/common.blocks/DragDropBackdrop";
-import { RemovePathsAndEndControls } from "./core/Command";
+import { RemovePathsAndEndControls, UpdatePathTreeItems } from "./core/Command";
 import React from "react";
 import { getUsableLayout } from "./core/Layout";
 import { getAppThemeInfo } from "./app/Theme";
@@ -33,6 +33,11 @@ import { RequireLocalFieldImageModal } from "./app/common.blocks/modal/RequireLo
 import { GeneralConfigPanel } from "./app/common.blocks/panel/GeneralConfigPanel";
 import { ControlConfigPanel } from "./app/common.blocks/panel/ControlConfigPanel";
 import { CoordinateSystemModal } from "./app/common.blocks/modal/CoordinateSystemModal";
+import { CoordinateSystemTransformation } from "./core/CoordinateSystem";
+import { parseFormula } from "./core/Util";
+import { NumberUOA, NumberUOL } from "./token/Tokens";
+import { UnitOfAngle } from "./core/Unit";
+import { Coordinate, CoordinateWithHeading } from "./core/Coordinate";
 
 const Root = observer(() => {
   const { app, ui, appPreferences, clipboard } = getAppStores();
@@ -98,11 +103,81 @@ const Root = observer(() => {
   useUnsavedChangesPrompt();
 
   useClipboardPasteText(document.body, (text, e) => {
-    // UX: Do not paste if the user is typing in an input field or content editable element
-    // e.target is an input field if the focused element is a text input field, textarea, etc.
+    // UX: Do not paste if the user is typing in a content editable element
     // e.target is body if the focused element is checkbox, button, etc.
-    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+    const coordRegex = /^(-?\d*\.?\d*), ?(-?\d*\.?\d*)(?:, ?(-?\d*\.?\d*))?$/;
+
+    // Genuinely disappointed that Jerrylum forgot this
+    e.preventDefault();
+
+    if (e.target instanceof HTMLTextAreaElement) return;
     if (e.target instanceof HTMLElement && e.target.isContentEditable) return;
+
+    // Could be a control panel thing!
+    if (e.target instanceof HTMLInputElement) {
+      navigator.clipboard.readText().then(text => {
+        const matches = text.match(coordRegex);
+
+        if (!matches) {
+          return;
+        }
+
+        // TODO: Logic obtained from `ControlConfigPanel.tsx` -- abstract into
+        // helper function!
+        const cst: CoordinateSystemTransformation | undefined = (() => {
+          if (app.selectedEntityCount !== 1) return undefined;
+          const control = app.selectedControl;
+          if (control === undefined) return undefined;
+
+          const referencedPath = app.interestedPath();
+          if (referencedPath === undefined) return undefined;
+
+          const cs = app.coordinateSystem;
+          if (cs === undefined) return undefined;
+
+          const fieldDimension = app.fieldDimension;
+
+          const firstControl = referencedPath.segments[0].controls[0];
+
+          return new CoordinateSystemTransformation(cs, fieldDimension, firstControl);
+        })();
+
+        if (cst === undefined) return;
+
+        const control = app.selectedControl;
+
+        if (control === undefined) return;
+
+        const coordInFCS = cst.transform(control);
+        const xValueInFCS = parseFormula(matches[1], NumberUOL.parse)!.compute(app.gc.uol);
+        const yValueInFCS = parseFormula(matches[2], NumberUOL.parse)!.compute(app.gc.uol);
+        let headingValueInFCS;
+        if (matches[3]) {
+          console.log(matches[3]);
+          headingValueInFCS = parseFormula(matches[3], NumberUOA.parse)!.compute(UnitOfAngle.Degree);
+        }
+
+        let newCoordInfo: Coordinate = {
+          ...coordInFCS,
+          x: xValueInFCS,
+          y: yValueInFCS
+        };
+
+        let newCoordInfoWithHeading;
+        if (headingValueInFCS) {
+          newCoordInfoWithHeading = newCoordInfo as CoordinateWithHeading;
+          newCoordInfoWithHeading.heading = headingValueInFCS;
+        }
+
+        const newCoord = cst.inverseTransform(newCoordInfoWithHeading ?? newCoordInfo);
+
+        app.history.execute(`Update control ${control.uid} coordinate`, new UpdatePathTreeItems([control], newCoord));
+      });
+      return;
+    }
+
+    // Pasting a path.
     clipboard.paste(text);
   });
 
