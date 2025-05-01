@@ -38,8 +38,7 @@ const logger = Logger("App");
 // observable class
 export class MainApp {
   public format: Format =
-    getAllFormats().find(f => f.getName() === getPreference("lastSelectedFormat", "")) ??
-    new PathDotJerryioFormatV0_1();
+    getAllFormats().find(f => f.getName() === getPreference("lastSelectedFormat", "")) ?? new LemLibFormatV0_4();
   private usingUOL: UnitOfLength = UnitOfLength.Centimeter;
   public mountingFile: IOFileHandle = new IOFileHandle(null); // This is intended to be modified outside the class
 
