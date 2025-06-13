@@ -2,26 +2,26 @@ import { Button, Card } from "@mui/material";
 import { Box } from "@mui/system";
 import { observer } from "mobx-react-lite";
 import { Modal } from "./Modal";
-import { MarkdownOverwrittenComponents } from "@app/MarkdownSupport";
-import { action } from "mobx";
+// import { MarkdownOverwrittenComponents } from "@app/MarkdownSupport";
+// import { action } from "mobx";
 import React from "react";
 import { LayoutContext, LayoutType } from "@core/Layout";
 import { getAppStores } from "@core/MainApp";
-import WelcomeMDX from "./WelcomeForOthers.mdx";
-import WelcomeForBraveMDX from "./WelcomeForBrave.mdx";
-import { isBraveBrowser } from "@core/Util";
+// import WelcomeMDX from "./WelcomeForOthers.mdx";
+// import WelcomeForBraveMDX from "./WelcomeForBrave.mdx";
+// import { isBraveBrowser } from "@core/Util";
 
 import "./WelcomeModal.scss";
 
 export const WelcomeModalSymbol = Symbol("WelcomeModalSymbol");
 
 export const WelcomeModal = observer(() => {
-  const { appPreferences, ui } = getAppStores();
+  const { /* appPreferences, */ ui } = getAppStores();
 
   // const rawGAEnabled = localStorage.getItem("googleAnalyticsEnabled");
   // const [isGAEnabled, setIsGAEnabled] = React.useState(rawGAEnabled !== "false"); // UX: Default to true
 
-  const isBrave = isBraveBrowser();
+  // const isBrave = isBraveBrowser();
 
   // React.useEffect(() => {
   //   setIsGAEnabled(rawGAEnabled !== "false");

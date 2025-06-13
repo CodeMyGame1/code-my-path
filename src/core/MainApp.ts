@@ -5,7 +5,7 @@ import { AnyControl, EndControl, Path, PathTreeItem, Vector, relatedPaths, trave
 import { addToArray, removeFromArray, runInActionAsync } from "./Util";
 import { Format, convertPathFileData, getAllFormats, importPDJDataFromTextFile } from "../format/Format";
 import { promptFieldImage } from "./FieldImagePrompt";
-import { PathDotJerryioFormatV0_1 } from "../format/PathDotJerryioFormatV0_1";
+// import { PathDotJerryioFormatV0_1 } from "../format/PathDotJerryioFormatV0_1";
 import { instanceToPlain, plainToClassFromExist } from "class-transformer";
 import { Quantity, UnitConverter, UnitOfLength } from "./Unit";
 import { CommandHistory } from "./Command";

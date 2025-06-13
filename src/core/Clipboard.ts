@@ -357,7 +357,7 @@ export class AppClipboard {
         // controls' ConfigPanels (only those for `EndControl`s)... but just in case
         if ("heading" in control) {
           control = control as EndControl;
-          textToCopy = `${control.x.toFixed(3)}, ${control.y.toFixed(3)}, ` + `${control.heading.toFixed(1)}`;
+          textToCopy = `${control.x.toFixed(3)}, ${control.y.toFixed(3)}, ${control.heading.toFixed(1)}`;
         }
       }
       await navigator.clipboard.writeText(textToCopy);
