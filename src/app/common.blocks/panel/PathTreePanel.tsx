@@ -34,8 +34,15 @@ import { APP_VERSION_STRING } from "@src/Version";
 import DOMPurify from "dompurify";
 
 import "./PathTreePanel.scss";
+import { PanelBox } from "@src/app/component.blocks/PanelBox";
+import { FormButton } from "@src/app/component.blocks/FormButton";
+import { enqueueErrorSnackbar } from "@src/app/Notice";
+import { Logger } from "@src/core/Logger";
+import parseCode from "@src/core/CodeAnalysis";
 
 const MIME_TYPE = `application/x-item-uid-path.jerryio.com-${APP_VERSION_STRING}`;
+
+const logger = Logger("PathTreePanel");
 
 function touchItem(
   variables: PathTreeVariables,
@@ -646,20 +653,72 @@ const TreeView = observer((props: { variables: PathTreeVariables }) => {
     moveItem(variables, entity, event.dataTransfer.getData(MIME_TYPE));
   }
 
+  async function onCodeUpload(event: React.MouseEvent<HTMLButtonElement>) {
+    // Unfocus button immediately, before mouse event expires.
+    (event.currentTarget as HTMLElement).blur();
+
+    const autonCode = prompt("Enter the code to turn into a path: ");
+    if (!autonCode) {
+      enqueueErrorSnackbar(logger, "Invalid code provided!");
+      return;
+    }
+
+    const pathPoints = await parseCode(autonCode);
+    if (!pathPoints) {
+      enqueueErrorSnackbar(logger, "Auton code not encapsulated in a function, or another error with " + "formatting.");
+      return;
+    }
+
+    // Create a new Path.JerryIO path, and display the points specified in the
+    // code to the screen.
+    const pathSegments = [];
+
+    for (let i = 0; i < pathPoints.length - 1; i++) {
+      // Unpacks points, applying an "inch" unit to them (the code is parsed as
+      // LemLib code, which uses inches as its default unit).
+      const startPoint = pathPoints[i];
+      const [startPointX, startPointY] = [
+        new Quantity<UnitOfLength>(startPoint[0], UnitOfLength.Inch).to(app.gc.uol),
+        new Quantity<UnitOfLength>(startPoint[1], UnitOfLength.Inch).to(app.gc.uol)
+      ];
+
+      const endPoint = pathPoints[i + 1];
+      const [endPointX, endPointY] = [
+        new Quantity<UnitOfLength>(endPoint[0], UnitOfLength.Inch).to(app.gc.uol),
+        new Quantity<UnitOfLength>(endPoint[1], UnitOfLength.Inch).to(app.gc.uol)
+      ];
+
+      const segment = new Segment(new EndControl(startPointX, startPointY, 0), new EndControl(endPointX, endPointY, 0));
+
+      pathSegments.push(segment);
+    }
+
+    const pathFromCode = app.format.createPath(...pathSegments);
+    app.history.execute(`Add path ${pathFromCode.uid} from code`, new AddPath(app.paths, pathFromCode));
+    app.addExpanded(pathFromCode);
+
+    console.log(`Added path with UID ${pathFromCode.uid}`);
+  }
+
   const ref = React.useRef<HTMLUListElement>(null);
 
   return (
-    <ul
-      className="PathTreePanel-TreeView"
-      ref={ref}
-      tabIndex={0}
-      onKeyDown={action(onKeyDown)}
-      onBlur={action(onBlur)}
-      onDrop={action(onDrop)}>
-      {app.paths.map(path => {
-        return <TreeItem key={path.uid} entity={path} variables={props.variables} treeViewRef={ref} />;
-      })}
-    </ul>
+    <>
+      <PanelBox>
+        <FormButton onClick={action(onCodeUpload)}>Gen Path From Code</FormButton>
+      </PanelBox>
+      <ul
+        className="PathTreePanel-TreeView"
+        ref={ref}
+        tabIndex={0}
+        onKeyDown={action(onKeyDown)}
+        onBlur={action(onBlur)}
+        onDrop={action(onDrop)}>
+        {app.paths.map(path => {
+          return <TreeItem key={path.uid} entity={path} variables={props.variables} treeViewRef={ref} />;
+        })}
+      </ul>
+    </>
   );
 });
 

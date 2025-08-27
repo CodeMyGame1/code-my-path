@@ -18,6 +18,17 @@ module.exports = async env => {
     },
     webpack: {
       configure: webpackConfig => {
+        webpackConfig.resolve.fallback = {
+          fs: false,
+          path: false,
+          os: false,
+          module: false,
+        };
+
+        webpackConfig.experiments = {
+          asyncWebAssembly: true,
+        };
+
         addAfterLoader(webpackConfig, loaderByName("babel-loader"), {
           test: /\.(md|mdx)$/,
           loader: require.resolve("@mdx-js/loader"),
@@ -26,6 +37,7 @@ module.exports = async env => {
             remarkPlugins: [remarkGfm]
           }
         });
+
         return webpackConfig;
       }
     },
