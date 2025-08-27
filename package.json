@@ -1,6 +1,6 @@
 {
   "name": "path.jerryio",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "private": true,
   "engines": {
     "node": "22.x",
@@ -39,6 +39,7 @@
     "socket.io-client": "^4.8.1",
     "use-image": "^1.1.0",
     "util": "^0.12.5",
+    "web-tree-sitter": "^0.25.8",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.5.4",
     "workbox-broadcast-update": "^6.5.4",
