@@ -665,7 +665,7 @@ const TreeView = observer((props: { variables: PathTreeVariables }) => {
 
     const pathPoints = await parseCode(autonCode);
     if (!pathPoints) {
-      enqueueErrorSnackbar(logger, "Auton code not encapsulated in a function, or another error with " + "formatting.");
+      enqueueErrorSnackbar(logger, "Auton code not encapsulated in a function, or another error with formatting.");
       return;
     }
 
