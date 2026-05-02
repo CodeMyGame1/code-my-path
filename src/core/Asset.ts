@@ -427,9 +427,33 @@ const builtInAssets: FieldImageAsset<FieldImageOriginType>[] = [
   // 3683 = 145*2.54*10 ~= 3676.528, the size of the field perimeter in Fusion 360
   // Field image file name: Competition-Season-Setup-View-Theme@SemVer.png
   createBuiltInFieldImage(
+    "V5RC 2027 - Override",
+    3690,
+    "/precache/V5RC-Override-H2H-TopDownHighlighted-TileColor66_71@0.1+2000px.png",
+    "V5RC-Override-H2H-TopDownHighlighted-TileColor66_71"
+  ),
+  createBuiltInFieldImage(
+    "V5RC 2027 - Override (Skills)",
+    3690,
+    "/static/V5RC-Override-Skills-TopDownHighlighted-TileColor66_71@0.1+2000px.png",
+    "V5RC-Override-Skills-TopDownHighlighted-TileColor66_71"
+  ),
+  createBuiltInFieldImage(
+    "VURC 2027 - Override",
+    3690,
+    "/static/VURC-Override-H2H-TopDownHighlighted-TileColor66_71@0.1+2000px.png",
+    "VURC-Override-H2H-TopDownHighlighted-TileColor66_71"
+  ),
+  createBuiltInFieldImage(
+    "VURC 2027 - Override (Skills)",
+    3690,
+    "/static/VURC-Override-Skills-TopDownHighlighted-TileColor66_71@0.1+2000px.png",
+    "VURC-Override-Skills-TopDownHighlighted-TileColor66_71"
+  ),
+  createBuiltInFieldImage(
     "V5RC 2026 - Push Back",
     3690,
-    "/precache/V5RC-PushBack-H2H-TopDownHighlighted-TileColor66_71@0.1+2000px.png",
+    "/static/V5RC-PushBack-H2H-TopDownHighlighted-TileColor66_71@0.1+2000px.png",
     "V5RC-PushBack-H2H-TopDownHighlighted-TileColor66_71"
   ),
   createBuiltInFieldImage(
