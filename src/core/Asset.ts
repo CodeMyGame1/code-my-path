@@ -521,7 +521,7 @@ const builtInAssets: FieldImageAsset<FieldImageOriginType>[] = [
   createBuiltInFieldImage(
     "VIQRC 2026 - Mix & Match (Skills)",
     1920,
-    "/static/VIQRC-MixAndMatch-Skills-TopDown-Original@0.1+2000px.png",
+    "/static/VIQRC-MixAndMatch-Skills-TopDown-Original@4.0+2000px.png",
     "VIQRC-MixAndMatch-Skills-TopDown-Original"
   ),
   createBuiltInFieldImage(
