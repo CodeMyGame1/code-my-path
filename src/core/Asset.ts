@@ -513,6 +513,18 @@ const builtInAssets: FieldImageAsset<FieldImageOriginType>[] = [
     "VRC Field Perimeter"
   ),
   createBuiltInFieldImage(
+    "VIQRC 2027 - Level Up",
+    1920,
+    "/static/VIQRC-LevelUp-H2H-TopDown-Original@0.1+2000px.png",
+    "VIQRC-LevelUp-H2H-TopDown-Original"
+  ),
+  createBuiltInFieldImage(
+    "VIQRC 2027 - Level Up (Skills)",
+    1920,
+    "/static/VIQRC-LevelUp-Skills-TopDown-Original@0.1+2000px.png",
+    "VIQRC-LevelUp-Skills-TopDown-Original"
+  ),
+  createBuiltInFieldImage(
     "VIQRC 2026 - Mix & Match",
     1920,
     "/static/VIQRC-MixAndMatch-H2H-TopDown-Original@0.1+2000px.png",
