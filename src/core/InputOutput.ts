@@ -167,16 +167,11 @@ async function readFileFromInput(): Promise<ArrayBuffer | undefined> {
 function downloadFile(buffer: ArrayBufferView<ArrayBufferLike>) {
   const { app, socket } = getAppStores();
 
-  // const a = document.createElement("a");
-  // const file = new Blob([buffer], { type: "text/plain" });
-  // a.href = URL.createObjectURL(file);
-  // a.download = app.mountingFile.name;
-  // a.click();
-
-  const file = app.mountingFile;
-  if (file.name === null) throw new Error("filename is undefined");
-
-  socket.emit("pp-file", file.name, buffer);
+  const a = document.createElement("a");
+  const file = new Blob([buffer] as BlobPart[], { type: "text/plain" });
+  a.href = URL.createObjectURL(file);
+  a.download = app.mountingFile.name;
+  a.click();
   // TODO: await response from server before showing "Saved!"
   enqueueSuccessSnackbar(logger, "Saved!");
 

@@ -753,7 +753,7 @@ const FieldCanvasElement = observer((props: {}) => {
     if (fieldEditor.interaction === undefined) fieldEditor.mousePosInUOL = undefined;
   }
 
-  const visiblePaths = app.paths.filter(path => path.visible);
+  const visiblePaths = app.paths.filter(path => path.visible && path.uid === app.activePathUid);
 
   return (
     <Padding0Tooltip

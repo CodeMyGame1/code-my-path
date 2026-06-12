@@ -243,7 +243,8 @@ export class LemLibTarballFormatV0_5 implements Format {
 
     let ignoredPaths: string[] = [];
 
-    for (const path of app.paths) {
+    // for (const path of app.paths) {
+    for (const path of app.paths.filter(path => path.uid === app.activePathUid)) {
       if (path.segments.length === 0) {
         ignoredPaths.push(path.name);
         continue;

@@ -14,6 +14,7 @@ import { MenuMainDropdown } from "../common.blocks/panel/MenuPanel";
 import { PanelFloatingInstance, PanelStaticInstance } from "../common.blocks/panel/Panel";
 import { PathTreePanel } from "../common.blocks/panel/PathTreePanel";
 import { SpeedCanvasElement } from "../common.blocks/speed-canvas/SpeedCanvasElement";
+import { PathTabsNavBar } from "../common.blocks/PathTabsNavBar";
 
 class MobileLayoutVariables {
   public currentPanel: string | null = null;
@@ -44,6 +45,7 @@ export const MobileLayout = observer(() => {
   return (
     <>
       <Box>
+        <PathTabsNavBar />
         <FieldCanvasElement />
       </Box>
       <Box id="TopNav">

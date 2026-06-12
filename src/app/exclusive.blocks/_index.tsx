@@ -17,6 +17,7 @@ import { MenuMainDropdown } from "../common.blocks/panel/MenuPanel";
 import { PanelFloatingInstance } from "../common.blocks/panel/Panel";
 import { PathTreePanel } from "../common.blocks/panel/PathTreePanel";
 import { SpeedCanvasElement } from "../common.blocks/speed-canvas/SpeedCanvasElement";
+import { PathTabsNavBar } from "../common.blocks/PathTabsNavBar";
 
 class ExclusiveLayoutVariables {
   private panelStates: { [key: string]: boolean } = {};
@@ -64,6 +65,7 @@ export const ExclusiveLayout = observer(() => {
 
   return (
     <>
+      <PathTabsNavBar />
       <Box className="FieldCanvas-Container">
         <FieldCanvasElement />
       </Box>

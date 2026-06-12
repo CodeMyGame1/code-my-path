@@ -9,6 +9,7 @@ import { PanelStaticInstance, PanelAccordionInstance } from "../common.blocks/pa
 import { PathTreePanel } from "../common.blocks/panel/PathTreePanel";
 import { SpeedCanvasElement } from "../common.blocks/speed-canvas/SpeedCanvasElement";
 import { MousePositionPresentation } from "../common.blocks/MousePositionPresentation";
+import { PathTabsNavBar } from "../common.blocks/PathTabsNavBar";
 
 export const ClassisLayout = observer(() => {
   const { appPreferences, ui } = getAppStores();
@@ -23,6 +24,7 @@ export const ClassisLayout = observer(() => {
       </Box>
 
       <Box id="MiddleSection" className={classNames({ "full-height": !appPreferences.isSpeedCanvasVisible })}>
+        <PathTabsNavBar />
         <Card id="FieldCanvas-Container">
           <svg viewBox="0 0 1 1"></svg>
           <FieldCanvasElement />

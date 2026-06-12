@@ -1,7 +1,7 @@
 import { makeAutoObservable, computed, runInAction, reaction, action } from "mobx";
 import DOMPurify from "dompurify"; // cspell:disable-line
 import { GeneralConfig } from "../format/Config";
-import { AnyControl, EndControl, Path, PathTreeItem, Vector, relatedPaths, traversal } from "./Path";
+import { AnyControl, EndControl, Path, PathTreeItem, Segment, Vector, relatedPaths, traversal } from "./Path";
 import { addToArray, removeFromArray, runInActionAsync } from "./Util";
 import { Format, convertPathFileData, getAllFormats, importPDJDataFromTextFile } from "../format/Format";
 import { promptFieldImage } from "./FieldImagePrompt";
@@ -48,6 +48,12 @@ export class MainApp {
   private lastInterestedPath: Path | undefined = undefined; // ALGO: For adding controls
   private expanded: string[] = []; // ALGO: Order doesn't matter but anyway
   private fieldDimension_: Dimension = { width: 0, height: 0 };
+
+  // ALGO: Multi-tab selection.
+  public activePathUid: string | undefined = undefined;
+  setActivePath(uid: string) {
+    this.activePathUid = uid;
+  }
 
   public robot = {
     position: new EndControl(0, 0, 0)
@@ -303,11 +309,14 @@ export class MainApp {
   }
 
   interestedPath(): Path | undefined {
-    // ALGO: Return the selected path or last selected path or first path
-    const check = this.selectedPath ?? this.lastInterestedPath ?? this.paths[0];
-    const rtn = this.paths.some(path => path.uid === check?.uid) ? check : undefined;
+    // ALGO: Return the path corresponding to the current tab, else default
+    // to the first path defined in the file.
+    const rtn = this.paths.find(p => p.uid === this.activePathUid) ?? this.paths[0];
 
-    runInAction(() => (this.lastInterestedPath = rtn));
+    // If we defaulted to first path, run normal behavior.
+    if (rtn && rtn.uid !== this.activePathUid) {
+      runInAction(() => (this.lastInterestedPath = rtn));
+    }
 
     return rtn;
   }
@@ -409,7 +418,11 @@ export class MainApp {
 
     this.format = newFormat;
     this.usingUOL = this.gc.uol;
-    this.paths = [];
+    // Create a dummy segment in the path so initial calculators are happy.
+    this.paths = [this.format.createPath(new Segment(new EndControl(0, 0, 0), new EndControl(10, 0, 0)))];
+
+    this.activePathUid = this.paths[0].uid;
+    this.history.clearHistory();
   }
 
   /**
