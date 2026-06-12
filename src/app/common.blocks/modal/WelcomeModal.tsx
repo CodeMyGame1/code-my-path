@@ -41,7 +41,7 @@ export const WelcomeModal = observer(() => {
     <Modal symbol={WelcomeModalSymbol} onClose={onClose}>
       <Card id="WelcomeModal" className="Modal-Container">
         {isMobileLayout && (
-          <Box textAlign="right">
+          <Box sx={{ textAlign: "right" }}>
             <Button onClick={onClose}>Continue</Button>
           </Box>
         )}
@@ -51,7 +51,7 @@ export const WelcomeModal = observer(() => {
           <WelcomeMDX {...{ isGAEnabled, setIsGAEnabled }} components={MarkdownOverwrittenComponents} />
         )} */}
         {isMobileLayout && (
-          <Box textAlign="center">
+          <Box sx={{ textAlign: "center" }}>
             <Button onClick={onClose}>Begin</Button>
           </Box>
         )}

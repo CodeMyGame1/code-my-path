@@ -52,7 +52,7 @@ export function useCustomHotkeys<T extends HTMLElement>(
   callback: () => void,
   options?: CustomHotkeysOptions,
   dependencies?: DependencyList
-): React.MutableRefObject<RefType<T>> {
+) {
   const timeRef = React.useRef<number | null>(null);
   const enabledRef = React.useRef<boolean>(false);
 

@@ -91,7 +91,7 @@ async function writeFile(buffer: ArrayBufferView<ArrayBufferLike>): Promise<bool
     await file.handle.requestPermission({ mode: "readwrite" });
 
     const writable = await file.handle.createWritable();
-    await writable.write(buffer);
+    await writable.write(buffer as any);
     await writable.close();
 
     // getAppStores().ga.gtag("event", "write_file_format", { format: app.format.getName() });
