@@ -165,7 +165,7 @@ async function readFileFromInput(): Promise<ArrayBuffer | undefined> {
 }
 
 function downloadFile(buffer: ArrayBufferView<ArrayBufferLike>) {
-  const { app, socket } = getAppStores();
+  const { app } = getAppStores();
 
   const a = document.createElement("a");
   const file = new Blob([buffer] as BlobPart[], { type: "text/plain" });

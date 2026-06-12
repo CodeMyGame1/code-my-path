@@ -1,7 +1,7 @@
 import { runInAction, action } from "mobx";
 import React, { DependencyList } from "react";
 import { Options, useHotkeys } from "react-hotkeys-hook";
-import { RefType, HotkeyCallback, HotkeysEvent, Trigger, FormTags } from "react-hotkeys-hook/dist/types";
+import { HotkeyCallback, HotkeysEvent, Trigger, FormTags } from "react-hotkeys-hook/dist/types";
 import { getAppStores } from "./MainApp";
 import { Vector } from "./Path";
 import { IS_MAC_OS } from "./Util";
@@ -47,7 +47,7 @@ export function getEnableOnNonTextInputFieldsHotkeysOptions(enabled: boolean): C
   };
 }
 
-export function useCustomHotkeys<T extends HTMLElement>(
+export function useCustomHotkeys(
   keys: string,
   callback: () => void,
   options?: CustomHotkeysOptions,
