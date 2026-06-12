@@ -33,6 +33,17 @@
       --hover-color: rgba(0, 0, 0, 0.08);
       --focused-color: rgba(0, 0, 0, 0.12);
       --primary-main-color: #5c469c;
+      --tab-bar-bg: #dee1e6;
+      --tab-active-bg: #ffffff;
+      --tab-hover-bg: rgba(0, 0, 0, 0.04);
+      --tab-text-active: rgba(0, 0, 0, 0.87);
+      --tab-text-inactive: rgba(0, 0, 0, 0.55);
+      --tab-close-hover-bg: rgba(0, 0, 0, 0.08);
+      --tab-separator: rgba(0, 0, 0, 0.1);
+      --tab-border-bottom: rgba(0, 0, 0, 0.08);
+      --tab-add-hover-bg: rgba(0, 0, 0, 0.06);
+      --tab-rename-bg: rgba(0, 0, 0, 0.06);
+      --tab-rename-border: rgba(0, 0, 0, 0.2);
       background-color: var(--bg-body-color);
 
       code {
@@ -59,6 +70,17 @@
       --hover-color: rgba(255, 255, 255, 0.04);
       --focused-color: rgba(255, 255, 255, 0.12);
       --primary-main-color: #7f47b3;
+      --tab-bar-bg: #202124;
+      --tab-active-bg: #353639;
+      --tab-hover-bg: rgba(255, 255, 255, 0.06);
+      --tab-text-active: rgba(255, 255, 255, 0.9);
+      --tab-text-inactive: rgba(255, 255, 255, 0.55);
+      --tab-close-hover-bg: rgba(255, 255, 255, 0.12);
+      --tab-separator: rgba(255, 255, 255, 0.1);
+      --tab-border-bottom: rgba(255, 255, 255, 0.05);
+      --tab-add-hover-bg: rgba(255, 255, 255, 0.08);
+      --tab-rename-bg: rgba(255, 255, 255, 0.08);
+      --tab-rename-border: rgba(255, 255, 255, 0.2);
       background-color: var(--bg-body-color);
 
       code {
